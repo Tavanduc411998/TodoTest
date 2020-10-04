@@ -1,13 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AntDesign } from "@expo/vector-icons";
+
+const Tab = createBottomTabNavigator();
+
+import CompleteScreen from "./CompleteScreen";
+import AllScreen from "./AllScreen";
+import ActiveScreen from "./ActiveScreen";
+
+const routeIcons = {
+  Complete: "message1",
+  All: "contacts",
+  Active: "team",
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+      console.log('dismissed keyboard');
+    }}>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused }) => (
+              <AntDesign
+                name={routeIcons[route.name]}
+                size={24}
+                color={focused ? "blue" : "grey"}
+              />
+            ),
+          })}
+          tabBarOptions={{
+            activeTintColor: "blue",
+            inactiveTintColor: "grey",
+          }}
+        >
+          <Tab.Screen name="Complete" component={CompleteScreen} />
+          <Tab.Screen name="All" component={AllScreen} />
+          <Tab.Screen name="Active" component={ActiveScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </TouchableWithoutFeedback>
   );
 }
 
